@@ -16,9 +16,8 @@ template <typename T> struct DoublyLinkedList {
 
     DoublyLinkedList();
     DoublyLinkedList(DoublyLinkedList const& other);
+    DoublyLinkedList& operator=(DoublyLinkedList const& other);
     ~DoublyLinkedList();
-
-    int size() const;
 
     Node* front();
     Node* back();
@@ -28,6 +27,8 @@ template <typename T> struct DoublyLinkedList {
 
     Node* predecessor(Node* cursor);
     Node* successor(Node* cursor);
+
+    int size() const;
 };
 
 #endif
