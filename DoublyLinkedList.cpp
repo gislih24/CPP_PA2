@@ -36,8 +36,9 @@ template <typename T> struct DoublyLinkedList {
     }
 
     // Assignment Operator
-    DoublyLinkedList& operator=(DoublyLinkedList const& other) {
+    DoublyLinkedList& operator=(Node*& cursor, DoublyLinkedList const& other) {
         // TODO
+        // Remember that the cursor should be set to our list's sentinel node.
     }
 
     // Destructor
