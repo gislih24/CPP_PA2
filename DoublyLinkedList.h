@@ -1,6 +1,6 @@
 #ifndef DOUBLYLINKEDLIST_H
 #define DOUBLYLINKEDLIST_H
-// Just an example:
+// Just an example header file, it's not finished:
 template <typename T> struct DoublyLinkedList {
     struct Node {
         Node* prev;

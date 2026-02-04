@@ -22,6 +22,8 @@ template <typename T> struct DoublyLinkedList {
     // Constructor
     DoublyLinkedList() : listSize(0) {}; // sentinel() is done by default.
 
+    // Must properly copy the contents of another instance of the data
+    // structure. Ensure the two instances do not share memory afterwards!
     // Copy Constructor
     DoublyLinkedList(DoublyLinkedList const& other) : listSize(0) {
         // Append elements by inserting before sentinel (at the end).
@@ -31,6 +33,11 @@ template <typename T> struct DoublyLinkedList {
                    currentNode->value);      // Insert before our sentinel.
             currentNode = currentNode->next; // Traverse forward.
         }
+    }
+
+    // Assignment Operator
+    DoublyLinkedList& operator=(DoublyLinkedList const& other) {
+        // TODO
     }
 
     // Destructor
@@ -47,11 +54,17 @@ template <typename T> struct DoublyLinkedList {
         listSize = 0;
     }
 
-    int size() const { return listSize };
+    // Return the first node of the list, not a sentinel node.
+    Node* front() {
+        return sentinel.next;
+    }
+    // Return the last node of the list, not a sentinel node.
+    Node* back() {
+        return sentinel.prev;
+    }
 
-    Node* front() { return sentinel.next };
-    Node* back() { return sentinel.prev };
-
+    // Must insert a node with the given element before the cursor, returning
+    // the newly inserted node.
     // The name SHOULD be 'insert_before' IMHFO, but whatever.
     Node* insert(Node*& cursor, T const& value) {
         // "Node*&" means "a reference to a pointer to a Node". So we're
@@ -67,6 +80,7 @@ template <typename T> struct DoublyLinkedList {
         return newNode;
     }
 
+    // Must erase the cursor node, returning the node after the erased node.
     Node* erase(Node*& cursor) {
         Node* after = cursor->next;
 
@@ -82,11 +96,18 @@ template <typename T> struct DoublyLinkedList {
         return after;
     }
 
+    // Return the node before the cursor node
     Node* predecessor(Node*& cursor) {
         return cursor->prev;
     }
 
+    // Return the node after the cursor node
     Node* successor(Node*& cursor) {
         return cursor->next;
+    }
+
+    // Return the size of the instance
+    int size() const {
+        return listSize;
     }
 };
