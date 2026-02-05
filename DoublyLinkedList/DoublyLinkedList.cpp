@@ -43,11 +43,11 @@ template <typename T> struct DoublyLinkedList {
     // Destructor
     ~DoublyLinkedList() {
         // Kill. Them. All. :( jk I'm not sad they deserve it :)
-        Node* currentNode = sentinel.prev;
+        Node* currentNode = sentinel.next;
         while (currentNode != &sentinel) {
-            Node* nextNode = currentNode->next;
-            delete currentNode;
-            currentNode = nextNode;
+            Node* toDelete = currentNode;
+            currentNode = currentNode->next;
+            delete toDelete;
         }
         sentinel.next = &sentinel;
         sentinel.prev = &sentinel;
