@@ -1,3 +1,5 @@
+#include "DoublyLinkedList.h"
+
 template <typename T> struct DoublyLinkedList {
     struct Node {
         Node* prev; // predecessor
@@ -76,6 +78,14 @@ template <typename T> struct DoublyLinkedList {
     // Return the last node(tail) of the list, a sentinel node.
     Node* back() {
         return &sentinel;
+    }
+
+    // Kattis wants these for some reason...
+    Node* begin_node() {
+        return front();
+    }
+    Node* sentinel_end_node() {
+        return back();
     }
 
     // Must insert a node with the given element before the cursor, returning
