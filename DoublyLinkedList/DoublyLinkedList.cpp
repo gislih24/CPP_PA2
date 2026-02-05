@@ -17,6 +17,17 @@ template <typename T> struct DoublyLinkedList {
     Node sentinel;
     // We gotta increment and decrement listSize jafnóðum.
     int listSize;
+    void clearList() {
+        Node* current = sentinel.next;
+        while (current != &sentinel) {
+            Node* next = current->next;
+            current = next;
+            delete current;
+        }
+        sentinel.next = &sentinel;
+        sentinel.prev = &sentinel;
+        listSize = 0;
+    }
 
     // Constructor
     DoublyLinkedList() : listSize(0) {}; // sentinel() is done by default.
@@ -38,18 +49,11 @@ template <typename T> struct DoublyLinkedList {
     }
     // Assignment Operator
     DoublyLinkedList& operator=(DoublyLinkedList const& other) {
-        if (this == &other) return *this; // guard in case of self assignment
+        if (this == &other)
+            return *this; // guard in case of self assignment
 
         // clear current contents
-        Node* current = sentinel.next;
-        while (current != &sentinel) {
-            Node* next = current->next;
-            delete current;
-            current = next;
-        }
-        sentinel.next = &sentinel;
-        sentinel.prev = &sentinel;
-        listSize = 0;
+        clearList();
 
         // deep copy from other before our sentinel
         const Node* otherNode = other.sentinel.next;
@@ -63,15 +67,7 @@ template <typename T> struct DoublyLinkedList {
     // Destructor
     ~DoublyLinkedList() {
         // Kill. Them. All. :( jk I'm not sad they deserve it :)
-        Node* currentNode = sentinel.next;
-        while (currentNode != &sentinel) {
-            Node* toDelete = currentNode;
-            currentNode = currentNode->next;
-            delete toDelete;
-        }
-        sentinel.next = &sentinel;
-        sentinel.prev = &sentinel;
-        listSize = 0;
+        clearList();
     }
 
     // Return the first node(head) of the list, not a sentinel node.
