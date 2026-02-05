@@ -12,9 +12,8 @@ template <typename T> struct DoublyLinkedList {
     };
 
     // We gotta make sure that:
-    // sentinel.prev always points to the head,
-    // sentinel.next always points to the tail.
-    // The sentinel node is always located right before the tail.
+    // sentinel.next always points to the head,
+    // sentinel.prev always points to the tail.
     Node sentinel;
     // We gotta increment and decrement listSize jafnóðum.
     int listSize;
@@ -55,14 +54,14 @@ template <typename T> struct DoublyLinkedList {
         listSize = 0;
     }
 
-    // Return the first node of the list, not a sentinel node.
+    // Return the first node(head) of the list, not a sentinel node.
     Node* front() {
-        return sentinel.prev;
+        return sentinel.next;
     }
 
-    // Return the last node of the list, not a sentinel node.
+    // Return the last node(tail) of the list, not a sentinel node.
     Node* back() {
-        return sentinel.next;
+        return sentinel.prev;
     }
 
     // Must insert a node with the given element before the cursor, returning
