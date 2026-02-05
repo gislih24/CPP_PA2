@@ -48,14 +48,14 @@ You **should** document time complexities and exceptional cases for each operati
     - You must implement:
 	    - the default constructor,
 	    - copy constructor,
-	    - `push_back`,
-	    - `pop_back`,
-	    - `insert`,
-	    - `erase`,
-	    - `operator[]`,
-	    - `operator=`,
-	    - `resize`,
-	    - and `reserve` methods.
+	    - `push_back()`,
+	    - `pop_back()`,
+	    - `insert()`,
+	    - `erase()`,
+	    - `operator[]()`,
+	    - `operator=()`,
+	    - `resize()`,
+	    - and `reserve()` methods.
     - Statement on Kattis as PDF: [dynamicallysizedarray.pdf](https://reykjavik.instructure.com/courses/10032/files/2546644?wrap=1 "dynamicallysizedarray.pdf") [Download dynamicallysizedarray.pdf](https://reykjavik.instructure.com/courses/10032/files/2546644/download?download_frd=1)
     - Template for reading input: [template.cpp](https://reykjavik.instructure.com/courses/10032/files/2546645?wrap=1 "template.cpp") [Download template.cpp](https://reykjavik.instructure.com/courses/10032/files/2546645/download?download_frd=1)
 2. Implement a <u>linked-list</u> data structure. This is the built-in list data structure in C++. (20 points)
@@ -65,13 +65,13 @@ You **should** document time complexities and exceptional cases for each operati
 	    - the default constructor,
 	    - copy constructor,
 	    - assignment (`operator=`),
-	    - `front`,
-	    - `back`,
-	    - `insert`,
-	    - `erase`,
-	    - `size`,
-	    - `successor`,
-	    - and `predecessor`.
+	    - `front()`,
+	    - `back()`,
+	    - `insert()`,
+	    - `erase()`,
+	    - `size()`,
+	    - `successor()`,
+	    - and `predecessor()`.
     - Statement on Kattis as PDF: [doublylinkedlist.pdf](https://reykjavik.instructure.com/courses/10032/files/2546641?wrap=1 "doublylinkedlist.pdf") [Download doublylinkedlist.pdf](https://reykjavik.instructure.com/courses/10032/files/2546641/download?download_frd=1)
     - Template for reading input: [kattis_dll_template.cpp](https://reykjavik.instructure.com/courses/10032/files/2546643?wrap=1 "kattis_dll_template.cpp") [Download kattis_dll_template.cpp](https://reykjavik.instructure.com/courses/10032/files/2546643/download?download_frd=1)
 3. Implement a <u>queue</u>, <u>stack</u>, **OR** <u>double-ended queue</u> data structure. These are the built-in stack, queue, and deque data structures in C++. (15 points)
@@ -82,14 +82,14 @@ You **should** document time complexities and exceptional cases for each operati
     - For deque, you must implement:
 	    - the default constructor,
 	    - copy constructor,
-	    - assignment (`operator=`),
-	    - `push_front`,
-	    - `push_back`,
-	    - `pop_front`,
-	    - `pop_back`,
+	    - assignment (`operator=()`),
+	    - `push_front()`,
+	    - `push_back()`,
+	    - `pop_front()`,
+	    - `pop_back()`,
 	    - element access at the front,
 	    - element access at the back,
-	    - and `size`.
+	    - and `size()`.
     - Statements on Kattis as PDFs:
         - [stack2.pdf](https://reykjavik.instructure.com/courses/10032/files/2546647?wrap=1 "stack2.pdf") [Download stack2.pdf](https://reykjavik.instructure.com/courses/10032/files/2546647/download?download_frd=1)
         - [queue2.pdf](https://reykjavik.instructure.com/courses/10032/files/2546648?wrap=1 "queue2.pdf") [Download queue2.pdf](https://reykjavik.instructure.com/courses/10032/files/2546648/download?download_frd=1)
@@ -100,10 +100,10 @@ You **should** document time complexities and exceptional cases for each operati
     - You must implement:
 	    - the default constructor,
 	    - copy constructor,
-	    - assignment (`operator=`),
-	    - `push`,
-	    - `pop`, (`pop` should return the minimum element.)
-	    - `size`,
+	    - assignment (`operator=()`),
+	    - `push()`,
+	    - `pop()`, (`pop()` should return the minimum element.)
+	    - `size()`,
 	    - and element access to the top element.
     - Statement on Kattis as PDF: [heap2.pdf](https://reykjavik.instructure.com/courses/10032/files/2546642?wrap=1 "heap2.pdf") [Download heap2.pdf](https://reykjavik.instructure.com/courses/10032/files/2546642/download?download_frd=1)
 5. Implement a <u>hash table</u> structure with key-value pairs. This is the built-in dict in Python or `unordered_map` data structure in C++. (20 points)
@@ -115,12 +115,12 @@ You **should** document time complexities and exceptional cases for each operati
     - You must implement:
 	    - the default constructor,
 	    - copy constructor,
-	    - assignment (`operator=`),
-	    - `insert`,
-	    - `find`,
-	    - `erase`,
-	    - `operator[]`,
-	    - `size`.
+	    - assignment (`operator=()`),
+	    - `insert()`,
+	    - `find()`,
+	    - `erase()`,
+	    - `operator[]()`,
+	    - `size()`.
     - Statement on Kattis as PDF: [hashtable2.pdf](https://reykjavik.instructure.com/courses/10032/files/2546646?wrap=1 "hashtable2.pdf") [Download hashtable2.pdf](https://reykjavik.instructure.com/courses/10032/files/2546646/download?download_frd=1)
 6. Implement a <u>self-balancing binary search tree</u> structure with key-value pairs. This is the built-in map data structure in C++. (30 points)
     - If you implement a data structure that represents a binary tree, but not a binary search tree, you get a maximum of 5 points.
@@ -132,18 +132,18 @@ You **should** document time complexities and exceptional cases for each operati
     - You must implement:
 	    - the default constructor,
 	    - copy constructor,
-	    - assignment (`operator=`),
-	    - `insert`,
-	    - `find`,
-	    - `erase`,
-	    - `operator[]`,
-	    - `size`,
-	    - `successor`,
-	    - `predecessor`,
-	    - `rank`,
-	    - `kth_element`,
-	    - `lower_bound`,
-	    - and `upper_bound`.
+	    - assignment (`operator=()`),
+	    - `insert()`,
+	    - `find()`,
+	    - `erase()`,
+	    - `operator[]()`,
+	    - `size()`,
+	    - `successor()`,
+	    - `predecessor()`,
+	    - `rank()`,
+	    - `kth_element()`,
+	    - `lower_bound()`,
+	    - and `upper_bound()`.
     - Statement on Kattis as PDF: [selfbalancingbst.pdf](https://reykjavik.instructure.com/courses/10032/files/2546650?wrap=1 "selfbalancingbst.pdf") [Download selfbalancingbst.pdf](https://reykjavik.instructure.com/courses/10032/files/2546650/download?download_frd=1)
     - Template for input: [bst_template.cpp](https://reykjavik.instructure.com/courses/10032/files/2546651?wrap=1 "bst_template.cpp") [Download bst_template.cpp](https://reykjavik.instructure.com/courses/10032/files/2546651/download?download_frd=1)
 
