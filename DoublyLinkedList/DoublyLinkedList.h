@@ -74,7 +74,7 @@ template <typename T> struct DoublyLinkedList {
      *
      * @return A reference to this list.
      */
-    DoublyLinkedList& operator=(DoublyLinkedList const other) {
+    DoublyLinkedList& operator=(DoublyLinkedList const& other) {
         if (this == &other) {
             return *this;
         }
