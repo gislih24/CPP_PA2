@@ -107,10 +107,12 @@ template <typename T> struct DoublyLinkedList {
 
     // Return the node before the cursor node
     Node* predecessor(Node* cursor) {
+        return cursor->prev;
     }
 
     // Return the node after the cursor node
     Node* successor(Node* cursor) {
+        return cursor->next;
     }
 
     // Return the size of the instance
