@@ -57,11 +57,12 @@ template <typename T> struct DoublyLinkedList {
 
     // Return the first node of the list, not a sentinel node.
     Node* front() {
-        return sentinel.next;
+        return sentinel.prev;
     }
+
     // Return the last node of the list, not a sentinel node.
     Node* back() {
-        return sentinel.prev;
+        return sentinel.next;
     }
 
     // Must insert a node with the given element before the cursor, returning
