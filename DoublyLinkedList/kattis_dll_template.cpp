@@ -6,8 +6,8 @@ using std::cin;
 using std::cout;
 using std::ws;
 
-your_list_type lists[1000];
-your_node_type* cursors[1000];
+DoublyLinkedList<int> lists[1000];
+Node<int>* cursors[1000];
 
 int main() {
     int q;
