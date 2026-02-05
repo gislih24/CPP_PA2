@@ -1,18 +1,22 @@
-#ifndef DOUBLYLINKEDLIST_H
-#define DOUBLYLINKEDLIST_H
+#ifndef NODE
+#define NODE
 
+template <typename T> struct Node {
+    Node* prev; // predecessor
+    T data;
+    Node* next; // successor
+
+    // Constructor
+    Node() : prev(this), data(), next(this) {};
+
+    // Copy Constructor
+    Node(T const& _data) : prev(0), data(_data), next(0) {};
+};
+#endif
+
+#ifndef DOUBLYLINKEDLIST
+#define DOUBLYLINKEDLIST
 template <typename T> struct DoublyLinkedList {
-    struct Node {
-        Node* prev; // predecessor
-        T value;
-        Node* next; // successor
-
-        // Constructor
-        Node() : prev(this), value(), next(this) {};
-
-        // Copy Constructor
-        Node(T const& _value) : prev(0), value(_value), next(0) {};
-    };
 
     // We gotta make sure that:
     // sentinel.next always points to the head,
@@ -35,7 +39,7 @@ template <typename T> struct DoublyLinkedList {
     void copyOtherList(DoublyLinkedList const& other) {
         Node* cur = other.sentinel.next;
         while (cur != &other.sentinel) {
-            insert(&sentinel, cur->value); // append at end
+            insert(&sentinel, cur->data); // append at end
             cur = cur->next;
         }
     }
@@ -52,7 +56,7 @@ template <typename T> struct DoublyLinkedList {
     }
 
     // Assignment Operator
-    DoublyLinkedList& operator=(DoublyLinkedList const& other) {
+    DoublyLinkedList& operator=(DoublyLinkedList const other) {
         // In case they're the same object
         if (this == &other) {
             return *this;
@@ -92,10 +96,10 @@ template <typename T> struct DoublyLinkedList {
     // Must insert a node with the given element before the cursor, returning
     // the newly inserted node.
     // The name SHOULD be 'insert_before' IMHFO, but whatever.
-    Node* insert(Node* cursor, T const& value) {
+    Node* insert(Node* cursor, T const& data) {
         // "Node*&" means "a reference to a pointer to a Node". So we're
         // changing that pointer directly.
-        Node* newNode = new Node(value);
+        Node* newNode = new Node(data);
 
         newNode->prev = cursor->prev;
         newNode->next = cursor;
