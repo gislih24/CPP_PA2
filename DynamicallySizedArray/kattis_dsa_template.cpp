@@ -1,8 +1,8 @@
 #include <cassert>
 #include <iostream>
 
-using std::cout;
 using std::cin;
+using std::cout;
 using std::ws;
 
 your_array_type vecs[1000];
@@ -25,44 +25,35 @@ int main() {
             cin >> other;
             other--; // change to 0-based index
             // assignment
-        }
-        else if (op == '+') {
+        } else if (op == '+') {
             int value;
             cin >> value;
             // push back
-        }
-        else if (op == '-') {
+        } else if (op == '-') {
             // pop back
-        }
-        else if (op == 'i') {
+        } else if (op == 'i') {
             int index, value;
             cin >> index >> value;
             // insert
-        }
-        else if (op == 'e') {
+        } else if (op == 'e') {
             int index;
             cin >> index;
             // erase
-        }
-        else if (op == 'g') {
+        } else if (op == 'g') {
             int index;
             cin >> index;
             // get
-        }
-        else if (op == 's') {
+        } else if (op == 's') {
             int index, value;
             cin >> index >> value;
             // set
-        }
-        else if (op == 'r') {
+        } else if (op == 'r') {
             int sz;
             cin >> sz;
             // resize
-        }
-        else if (op == 'p') {
+        } else if (op == 'p') {
             // print
-        }
-        else {
+        } else {
             assert(false);
         }
     }
