@@ -75,9 +75,9 @@ template <typename T> struct DoublyLinkedList {
         return sentinel.next;
     }
 
-    // Return the last node(tail) of the list, not a sentinel node.
+    // Return the last node(tail) of the list, a sentinel node.
     Node* back() {
-        return sentinel.prev;
+        return &sentinel;
     }
 
     // Must insert a node with the given element before the cursor, returning
