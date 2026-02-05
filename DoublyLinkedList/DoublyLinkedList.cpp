@@ -37,9 +37,27 @@ template <typename T> struct DoublyLinkedList {
         // sentinel->head->...->tail
     }
     // Assignment Operator
-    DoublyLinkedList& operator=(Node*& cursor, DoublyLinkedList const& other) {
-        // TODO
-        // Remember that the cursor should be set to our list's sentinel node.
+    DoublyLinkedList& operator=(DoublyLinkedList const& other) {
+        if (this == &other) return *this; // guard in case of self assignment
+
+        // clear current contents
+        Node* current = sentinel.next;
+        while (current != &sentinel) {
+            Node* next = current->next;
+            delete current;
+            current = next;
+        }
+        sentinel.next = &sentinel;
+        sentinel.prev = &sentinel;
+        listSize = 0;
+
+        // deep copy from other before our sentinel
+        const Node* otherNode = other.sentinel.next;
+        while (otherNode != &other.sentinel) {
+            insert(&sentinel, otherNode->value);
+            otherNode = otherNode->next;
+        }
+        return *this;
     }
 
     // Destructor
