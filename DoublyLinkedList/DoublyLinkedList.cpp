@@ -21,8 +21,8 @@ template <typename T> struct DoublyLinkedList {
         Node* current = sentinel.next;
         while (current != &sentinel) {
             Node* next = current->next;
-            current = next;
             delete current;
+            current = next;
         }
         sentinel.next = &sentinel;
         sentinel.prev = &sentinel;
@@ -46,8 +46,10 @@ template <typename T> struct DoublyLinkedList {
 
     // Assignment Operator
     DoublyLinkedList& operator=(DoublyLinkedList const& other) {
-        if (this == &other)
-            return *this; // guard in case of self assignment
+        // In case they're the same object
+        if (this == &other) {
+            return *this;
+        }
 
         // clear current contents
         clearList();
@@ -96,12 +98,9 @@ template <typename T> struct DoublyLinkedList {
         // Swap that shiiit.
         cursor->prev->next = cursor->next;
         cursor->next->prev = cursor->prev;
-        cursor->prev = 0;
-        cursor->next = 0;
 
-        delete cursor; // Goodbye!
-
-        listSize--;
+        delete cursor;
+        --listSize;
         return after;
     }
 
