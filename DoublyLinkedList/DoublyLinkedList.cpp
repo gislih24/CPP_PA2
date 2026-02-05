@@ -37,16 +37,13 @@ template <typename T> struct DoublyLinkedList {
     // Copy Constructor
     DoublyLinkedList(DoublyLinkedList const& other) : listSize(0) {
         // Append elements by inserting before sentinel (at the end).
-        Node* cursor = &sentinel;
-        const Node* currentNode = other.sentinel.next;
-        while (currentNode != &other.sentinel) {
-            // Insert before cursor, and set cursor to the new node.
-            cursor = insert(cursor, currentNode->value);
-            // Traverse forward in other list.
-            currentNode = currentNode->next;
-        }
-        // sentinel->head->...->tail
+        copyOtherList(other);
     }
+
+    void copyOtherList(const DoublyLinkedList<T>& other) {
+        copyOtherList(other);
+    }
+
     // Assignment Operator
     DoublyLinkedList& operator=(DoublyLinkedList const& other) {
         if (this == &other)
@@ -55,12 +52,7 @@ template <typename T> struct DoublyLinkedList {
         // clear current contents
         clearList();
 
-        // deep copy from other before our sentinel
-        const Node* otherNode = other.sentinel.next;
-        while (otherNode != &other.sentinel) {
-            insert(&sentinel, otherNode->value);
-            otherNode = otherNode->next;
-        }
+        copyOtherList(other);
         return *this;
     }
 
