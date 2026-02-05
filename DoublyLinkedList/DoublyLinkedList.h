@@ -12,18 +12,20 @@ template <typename T> struct Node {
     // Copy Constructor
     Node(T const& _data) : prev(0), data(_data), next(0) {};
 };
+
 #endif
 
 #ifndef DOUBLYLINKEDLIST
 #define DOUBLYLINKEDLIST
-template <typename T> struct DoublyLinkedList {
 
-    // We gotta make sure that:
-    // sentinel.next always points to the head,
-    // sentinel.prev always points to the tail.
+template <typename T> struct DoublyLinkedList {
+  private:
+    // The sentinel node.
+    // sentinel.next always points to the head(front),
+    // sentinel.prev always points to the tail(back).
     Node sentinel;
-    // We gotta increment and decrement listSize jafnóðum.
-    int listSize;
+    int listSize; // Size of the list.
+
     void clearList() {
         Node* current = sentinel.next;
         while (current != &sentinel) {
@@ -44,6 +46,7 @@ template <typename T> struct DoublyLinkedList {
         }
     }
 
+  public:
     // Constructor
     DoublyLinkedList() : listSize(0) {}; // sentinel() is done by default.
 
