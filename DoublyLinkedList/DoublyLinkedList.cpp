@@ -83,7 +83,7 @@ template <typename T> struct DoublyLinkedList {
     // Must insert a node with the given element before the cursor, returning
     // the newly inserted node.
     // The name SHOULD be 'insert_before' IMHFO, but whatever.
-    Node* insert(Node*& cursor, T const& value) {
+    Node* insert(Node* cursor, T const& value) {
         // "Node*&" means "a reference to a pointer to a Node". So we're
         // changing that pointer directly.
         Node* newNode = new Node(value);
@@ -98,7 +98,7 @@ template <typename T> struct DoublyLinkedList {
     }
 
     // Must erase the cursor node, returning the node after the erased node.
-    Node* erase(Node*& cursor) {
+    Node* erase(Node* cursor) {
         Node* after = cursor->next;
 
         // Swap that shiiit.
@@ -114,15 +114,11 @@ template <typename T> struct DoublyLinkedList {
     }
 
     // Return the node before the cursor node
-    Node* predecessor(Node*& cursor) {
-        cursor = cursor->prev;
-        return cursor;
+    Node* predecessor(Node* cursor) {
     }
 
     // Return the node after the cursor node
-    Node* successor(Node*& cursor) {
-        cursor = cursor->next;
-        return cursor;
+    Node* successor(Node* cursor) {
     }
 
     // Return the size of the instance
