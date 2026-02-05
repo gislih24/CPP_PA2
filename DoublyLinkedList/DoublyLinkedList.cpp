@@ -29,6 +29,14 @@ template <typename T> struct DoublyLinkedList {
         listSize = 0;
     }
 
+    void copyOtherList(const DoublyLinkedList<T>& other) {
+        Node* cursor = &sentinel; // append before sentinel
+        for (const Node* cur = other.sentinel.next; cur != &other.sentinel;
+             cur = cur->next) {
+            insert(cursor, cur->value); // don't reassign cursor
+        }
+    }
+
     // Constructor
     DoublyLinkedList() : listSize(0) {}; // sentinel() is done by default.
 
@@ -38,14 +46,6 @@ template <typename T> struct DoublyLinkedList {
     DoublyLinkedList(DoublyLinkedList const& other) : listSize(0) {
         // Append elements by inserting before sentinel (at the end).
         copyOtherList(other);
-    }
-
-    void copyOtherList(const DoublyLinkedList<T>& other) {
-        Node* cursor = &sentinel; // append before sentinel
-        for (const Node* cur = other.sentinel.next; cur != &other.sentinel;
-             cur = cur->next) {
-            insert(cursor, cur->value); // don't reassign cursor
-        }
     }
 
     // Assignment Operator
