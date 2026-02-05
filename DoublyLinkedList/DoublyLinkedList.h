@@ -2,9 +2,9 @@
 #define NODE
 
 template <typename T> struct Node {
-    Node* prev; // predecessor
-    T data;
-    Node* next; // successor
+    Node* prev; // The next node in the list (predecessor).
+    T data;     // The data stored in the node.
+    Node* next; // The next node in the list (successor)
 
     // Constructor
     Node() : prev(this), data(), next(this) {};
@@ -20,12 +20,17 @@ template <typename T> struct Node {
 
 template <typename T> struct DoublyLinkedList {
   private:
-    // The sentinel node.
-    // sentinel.next always points to the head(front),
-    // sentinel.prev always points to the tail(back).
+    /* The sentinel node.
+     * sentinel.next always points to the head(front),
+     * sentinel.prev always points to the tail(back).
+     */
     Node sentinel;
-    int listSize; // Size of the list.
+    // Size of the list.
+    int listSize;
 
+    /**
+     * @brief Clears the list, freeing all allocated memory.
+     */
     void clearList() {
         Node* current = sentinel.next;
         while (current != &sentinel) {
@@ -38,6 +43,11 @@ template <typename T> struct DoublyLinkedList {
         listSize = 0;
     }
 
+    /**
+     * @brief Copies the contents of another list into this list.
+     *
+     * @param other The list to be copied.
+     */
     void copyOtherList(DoublyLinkedList const& other) {
         Node* cur = other.sentinel.next;
         while (cur != &other.sentinel) {
@@ -47,34 +57,35 @@ template <typename T> struct DoublyLinkedList {
     }
 
   public:
-    // Constructor
-    DoublyLinkedList() : listSize(0) {}; // sentinel() is done by default.
+    /**
+     * @brief Constructor that initializes an empty list.
+     */
+    DoublyLinkedList() : listSize(0) {};
 
-    // Must properly copy the contents of another instance of the data
-    // structure. Ensure the two instances do not share memory afterwards!
     // Copy Constructor
     DoublyLinkedList(DoublyLinkedList const& other) : listSize(0) {
-        // Append elements by inserting before sentinel (at the end).
         copyOtherList(other);
     }
 
-    // Assignment Operator
+    /**
+     * @brief Assignment operator using copy-and-swap idiom.
+     *
+     * @param other The list to be assigned.
+     *
+     * @return A reference to this list.
+     */
     DoublyLinkedList& operator=(DoublyLinkedList const other) {
-        // In case they're the same object
         if (this == &other) {
             return *this;
         }
 
-        // clear current contents
         clearList();
-
         copyOtherList(other);
         return *this;
     }
 
     // Destructor
     ~DoublyLinkedList() {
-        // Kill. Them. All. :( jk I'm not sad they deserve it :)
         clearList();
     }
 
@@ -89,16 +100,23 @@ template <typename T> struct DoublyLinkedList {
     }
 
     // Kattis wants these for some reason...
+    // Return the first node(head) of the list, not a sentinel node.
     Node* begin_node() {
         return front();
     }
+    // Return the last node(tail) of the list, a sentinel node.
     Node* sentinel_end_node() {
         return back();
     }
 
-    // Must insert a node with the given element before the cursor, returning
-    // the newly inserted node.
-    // The name SHOULD be 'insert_before' IMHFO, but whatever.
+    /**
+     * @brief Inserts a new node with the given data before the cursor node.
+     *
+     * @param cursor The node before which the new node will be inserted.
+     * @param data The data to be stored in the new node.
+     *
+     * @return A pointer to the newly inserted node.
+     */
     Node* insert(Node* cursor, T const& data) {
         // "Node*&" means "a reference to a pointer to a Node". So we're
         // changing that pointer directly.
@@ -113,11 +131,18 @@ template <typename T> struct DoublyLinkedList {
         return newNode;
     }
 
-    // Must erase the cursor node, returning the node after the erased node.
+    /**
+     * @brief Erases the cursor node from the list, returning the node after the
+     *        erased node.
+     *
+     * @param cursor The node to be erased.
+     *
+     * @return A pointer to the node that was after the erased node.
+     */
     Node* erase(Node* cursor) {
         Node* after = cursor->next;
 
-        // Swap that shiiit.
+        // Swap them
         cursor->prev->next = cursor->next;
         cursor->next->prev = cursor->prev;
 
