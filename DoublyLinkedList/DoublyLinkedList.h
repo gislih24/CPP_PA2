@@ -24,7 +24,7 @@ template <typename T> struct DoublyLinkedList {
      * sentinel.next always points to the head(front),
      * sentinel.prev always points to the tail(back).
      */
-    Node sentinel;
+    Node<T> sentinel;
     // Size of the list.
     int listSize;
 
@@ -32,9 +32,9 @@ template <typename T> struct DoublyLinkedList {
      * @brief Clears the list, freeing all allocated memory.
      */
     void clearList() {
-        Node* current = sentinel.next;
+        Node<T>* current = sentinel.next;
         while (current != &sentinel) {
-            Node* next = current->next;
+            Node<T>* next = current->next;
             delete current;
             current = next;
         }
@@ -49,7 +49,7 @@ template <typename T> struct DoublyLinkedList {
      * @param other The list to be copied.
      */
     void copyOtherList(DoublyLinkedList const& other) {
-        Node* cur = other.sentinel.next;
+        Node<T>* cur = other.sentinel.next;
         while (cur != &other.sentinel) {
             insert(&sentinel, cur->data); // append at end
             cur = cur->next;
@@ -90,22 +90,22 @@ template <typename T> struct DoublyLinkedList {
     }
 
     // Return the first node(head) of the list, not a sentinel node.
-    Node* front() {
+    Node<T>* front() {
         return sentinel.next;
     }
 
     // Return the last node(tail) of the list, a sentinel node.
-    Node* back() {
+    Node<T>* back() {
         return &sentinel;
     }
 
     // Kattis wants these for some reason...
     // Return the first node(head) of the list, not a sentinel node.
-    Node* begin_node() {
+    Node<T>* begin_node() {
         return front();
     }
     // Return the last node(tail) of the list, a sentinel node.
-    Node* sentinel_end_node() {
+    Node<T>* sentinel_end_node() {
         return back();
     }
 
@@ -117,10 +117,10 @@ template <typename T> struct DoublyLinkedList {
      *
      * @return A pointer to the newly inserted node.
      */
-    Node* insert(Node* cursor, T const& data) {
-        // "Node*&" means "a reference to a pointer to a Node". So we're
+    Node<T>* insert(Node<T>* cursor, T const& data) {
+        // "Node<T>*&" means "a reference to a pointer to a Node<T>". So we're
         // changing that pointer directly.
-        Node* newNode = new Node(data);
+        Node<T>* newNode = new Node<T>(data);
 
         newNode->prev = cursor->prev;
         newNode->next = cursor;
@@ -139,8 +139,8 @@ template <typename T> struct DoublyLinkedList {
      *
      * @return A pointer to the node that was after the erased node.
      */
-    Node* erase(Node* cursor) {
-        Node* after = cursor->next;
+    Node<T>* erase(Node<T>* cursor) {
+        Node<T>* after = cursor->next;
 
         // Swap them
         cursor->prev->next = cursor->next;
@@ -152,12 +152,12 @@ template <typename T> struct DoublyLinkedList {
     }
 
     // Return the node before the cursor node
-    Node* predecessor(Node* cursor) {
+    Node<T>* predecessor(Node<T>* cursor) {
         return cursor->prev;
     }
 
     // Return the node after the cursor node
-    Node* successor(Node* cursor) {
+    Node<T>* successor(Node<T>* cursor) {
         return cursor->next;
     }
 
