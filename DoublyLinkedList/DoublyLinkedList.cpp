@@ -26,14 +26,16 @@ template <typename T> struct DoublyLinkedList {
     // Copy Constructor
     DoublyLinkedList(DoublyLinkedList const& other) : listSize(0) {
         // Append elements by inserting before sentinel (at the end).
+        Node* cursor = &sentinel;
         const Node* currentNode = other.sentinel.next;
         while (currentNode != &other.sentinel) {
-            insert(&sentinel,
-                   currentNode->value);      // Insert before our sentinel.
-            currentNode = currentNode->next; // Traverse forward.
+            // Insert before cursor, and set cursor to the new node.
+            cursor = insert(cursor, currentNode->value);
+            // Traverse forward in other list.
+            currentNode = currentNode->next;
         }
+        // sentinel->head->...->tail
     }
-
     // Assignment Operator
     DoublyLinkedList& operator=(Node*& cursor, DoublyLinkedList const& other) {
         // TODO
