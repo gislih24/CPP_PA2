@@ -1,6 +1,7 @@
-Run it with:
+First, make sure you're in the right folder.
+Then, compile the program with:
 ```bash
-g++ -std=c++98 -O2 -Wall -Wextra -pedantic kattis_dll_template.cpp -o kattis_dll
+make
 ```
 
 And to run the program, with your input, use:
