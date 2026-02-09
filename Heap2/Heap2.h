@@ -1,5 +1,6 @@
-#ifndef DOUBLYLINKEDLIST_H
-#define DOUBLYLINKEDLIST_H
+#ifndef HEAP_H
+#define HEAP_H
+#include <DynamicallySizedArray.h>
 
 template <typename T> struct Heap2 {
     /*
@@ -18,59 +19,105 @@ template <typename T> struct Heap2 {
     ◌ Size - must provide the size of the heap. You must avoid any memory leaks
     or other memory errors in your implementation
     */
-
   private:
-    T array_;
-    int size_ = 0;
+    // T* array_[1000];
+    // We import DSA for code reusability and frankly because it's optimized.
+    DynamicallySizedArray<T> array_;
 
-    int getLargestChildIndex(int index) {
-        int leftIndex = 2 * index + 1;
-        int rightIndex = leftIndex + 1;
-        if (rightIndex < size_ && array_[leftIndex] < array_[rightIndex]) {
-            return rightIndex; // Right child is larger
-        } else {
-            return leftIndex; // Left child is larger (or is an only child)
+    void heapify(int index) {
+        for (int i = (array_.size() / 2) - 1; i > -1; --i) {
+            sift_down(i);
         }
     }
 
-    void heapify(int index) {
-        int examined = array_[index];
-        // Only heapify non-leaf nodes
-        while (index < size_ / 2) {
-            int largestChildIndex = getLargestChildIndex(index);
-            if (examined >= array_[largestChildIndex]) {
-                break; // Heap property is satisfied
+    void swap_array_values(int index1, int index2) {
+        T tempVar = array_[index1];
+        array_[index1] = array_[index2];
+        array_[index2] = array_[index1];
+    }
+
+    void sift_up(int elem_index) {
+        while (elem_index > 0) {
+            int parent_index = (elem_index - 1) / 2;
+            if (array_[elem_index] < array_[parent_index]) {
+                swap_array_values(elem_index, parent_index);
+                elem_index = parent_index;
             } else {
-                // Overwrite the current node with the value of its largest
-                // child.
-                array_[index] = array_[largestChildIndex];
-                // Move the index to the largest child to continue the process
-                // down the tree.
-                index = largestChildIndex;
+                return;
             }
         }
-        // Place the original root value at the final position determined by
-        // the last iteration.
-        array_[index] = examined;
+    }
+
+    void sift_down(int elem_index) {
+        int array_size = array_.size();
+        while (true) {
+            int left_child_index = 2 * elem_index + 1;
+            int right_child_index = left_child_index + 1;
+            int smallest = elem_index;
+
+            if (left_child_index < array_size &&
+                array_[left_child_index] < array_[smallest]) {
+                smallest = left_child_index;
+            }
+            if (right_child_index < array_size &&
+                array_[right_child_index] < array_[smallest]) {
+                smallest = right_child_index;
+            }
+
+            if (smallest == elem_index) {
+                return;
+            }
+
+            swap_array_values(elem_index, smallest);
+            elem_index = smallest;
+        }
     }
 
   public:
     // [ ] Constructor
+    Heap2() : array_() {}
 
     // [ ] Copy Constructor
+    Heap2(Heap2 const& other) : array_(other.array_) {}
 
     // [ ] Assignment operator
+    Heap2& operator=(Heap2 const& other) {
+        if (this == &other) {
+            return *this;
+        }
+        array_ = other.array_;
+        return *this;
+    }
+
+    // [ ] Desctructor
 
     // [ ] Push - must insert an element to the heap.
+    void push(T value) {
+        array_.push_back(value);
+        sift_up(array_.size() - 1);
+    }
 
     // [ ] Pop - must remove the smallest element from the heap.
+    void pop() {
+        if (array_.size() == 1) {
+            array_.pop_back();
+            return;
+        }
+
+        array_[0] = array_.pop_back();
+        sift_down(0);
+        return;
+    }
 
     // [ ] Peek - must provide access to the smallest element in the heap.
+    T peek() {
+        return array_[size_];
+    }
 
     // [x] Size - must provide the size of the heap. You must avoid any memory
     // leaks or other memory errors in your implementation.
     int size() const {
-        return size_;
+        return array_.size();
     }
 };
 
