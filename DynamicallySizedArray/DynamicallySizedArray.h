@@ -83,8 +83,9 @@ template <typename T> struct DynamicallySizedArray {
 
     // Assignment operator: deep copy
     DynamicallySizedArray& operator=(DynamicallySizedArray const& other) {
-        if (this == &other)
+        if (this == &other) {
             return *this;
+        }
         freeBuffer();
         copyFromOther(other);
         return *this;
@@ -158,8 +159,9 @@ template <typename T> struct DynamicallySizedArray {
      * @param newCapacity Desired capacity (>= 0).
      */
     void reserve(int newCapacity) {
-        if (newCapacity <= capacity_)
+        if (newCapacity <= capacity_) {
             return;
+        }
         T* newData = new T[newCapacity];
         // Copy assign existing elements
         for (int i = 0; i < size_; ++i) {
@@ -243,8 +245,9 @@ template <typename T> struct DynamicallySizedArray {
         if (newSize > capacity_) {
             // Grow to at least newSize; doubling strategy
             int newCap = (capacity_ == 0) ? 1 : capacity_;
-            while (newCap < newSize)
+            while (newCap < newSize) {
                 newCap *= 2;
+            }
             reserve(newCap);
         }
         // Default-initialize new elements
@@ -254,7 +257,10 @@ template <typename T> struct DynamicallySizedArray {
         size_ = newSize;
     }
 
-    // Clear:  removal of all elements
+    /**
+     * @brief Clear all elements, resetting to empty state. Capacity is
+     * unchanged.
+     */
     void clear() {
         size_ = 0;
         shrinkIfNeeded();
