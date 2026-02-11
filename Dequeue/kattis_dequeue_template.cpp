@@ -31,20 +31,20 @@ int main() {
             other--; // change to 0-based index
             // assignment
             vecs[instance] = vecs[other];
-        } else if (op == '+f') {
+        } else if (op == "+f") {
             int value;
             cin >> value;
             // push front
             vecs[instance].push_front(value)
-        } else if (op == '+b') {
+        } else if (op == "+b") {
             int value;
             cin >> value;
             // push back
             vecs[instance].push_back(value);
-        } else if (op == '-f') {
+        } else if (op == "-f") {
             // pop front
             vecs[instance].pop_front();
-        } else if (op == '-b') {
+        } else if (op == "-b") {
             // pop back
             vecs[instance].pop_back();
         } else if (op == 'f') {
