@@ -75,6 +75,25 @@ template <typename T> struct DynamicallySizedArray {
         capacity_ = newCap;
     }
 
+    /**
+     * @brief Swaps the contents of this array with another array.
+
+     * @param other The array to swap with.
+     */
+    void swap(DynamicallySizedArray& other) {
+        T* tData = data_;
+        data_ = other.data_;
+        other.data_ = tData;
+
+        int tSize = size_;
+        size_ = other.size_;
+        other.size_ = tSize;
+
+        int tCap = capacity_;
+        capacity_ = other.capacity_;
+        other.capacity_ = tCap;
+    }
+
   public:
     // Constructor: empty array
     DynamicallySizedArray() : data_(0), size_(0), capacity_(0) {}
@@ -87,11 +106,17 @@ template <typename T> struct DynamicallySizedArray {
 
     // Assignment operator: deep copy
     DynamicallySizedArray& operator=(DynamicallySizedArray const& other) {
-        if (this == &other) {
-            return *this;
+        if (this != &other) {
+            // Use copy-and-swap idiom for strong exception safety: copy first,
+            // then swap.
+            DynamicallySizedArray tmp(other);
+            // Swap the contents of `this` with the temporary copy.
+            // If the copy constructor throws an error, we won't have modified
+            // `this` at all.
+            // If it succeeds, we swap the new data into this and let tmp's
+            // destructor clean up the old data.
+            swap(tmp);
         }
-        freeBuffer();
-        copyFromOther(other);
         return *this;
     }
 
