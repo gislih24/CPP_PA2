@@ -45,30 +45,34 @@ template <typename T> struct DynamicallySizedArray {
      *        Uses halving to avoid thrashing; ensures capacity_ >= size_.
      */
     void shrinkIfNeeded() {
-        // Repeatedly halve capacity while size_ is at or below quarter.
-        while (capacity_ > 0 && size_ <= (capacity_ / 4)) {
-            int newCap = capacity_ / 2;
-            if (newCap < size_) {
-                newCap = size_;
-            }
-            if (newCap == capacity_) {
-                break;
-            }
-            if (newCap <= 0) {
-                // Free all when shrinking to zero
-                delete[] data_;
-                data_ = 0;
-                capacity_ = 0;
-                break;
-            }
-            T* newData = new T[newCap];
-            for (int i = 0; i < size_; ++i) {
-                newData[i] = data_[i];
-            }
-            delete[] data_;
-            data_ = newData;
-            capacity_ = newCap;
+        // Don't shrink below 16 to avoid "thrashing" on small sizes.
+        if (capacity_ <= 16) {
+            return;
         }
+        // Only shrink if size_ is down to a quarter of capacity_ or less.
+        if (size_ > capacity_ / 4) {
+            return;
+        }
+
+        int newCap = capacity_ / 2;
+        // Don't shrink below 16.
+        if (newCap < 16) {
+            newCap = 16;
+        }
+        // Ensure newCap is at least size_ to maintain invariants.
+        if (newCap < size_) {
+            newCap = size_;
+        }
+
+        T* newData = new T[newCap]; // Allocate new array with smaller capacity
+        // Copy assign existing elements to new array
+        for (int i = 0; i < size_; ++i) {
+            newData[i] = data_[i];
+        }
+        // Free old array and update pointers and capacity
+        delete[] data_;
+        data_ = newData;
+        capacity_ = newCap;
     }
 
   public:
