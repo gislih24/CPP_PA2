@@ -65,7 +65,7 @@ template <typename T> struct Heap2 {
             }
 
             if (smallest == elem_index) {
-                return;
+                break;
             }
 
             swap_array_values(elem_index, smallest);
@@ -82,36 +82,37 @@ template <typename T> struct Heap2 {
 
     // [ ] Assignment operator
     Heap2& operator=(Heap2 const& other) {
-        if (this == &other) {
-            return *this;
+        if (this != &other) {
+            array_ = other.array_;
         }
-        array_ = other.array_;
         return *this;
     }
 
     // [ ] Desctructor
 
     // [ ] Push - must insert an element to the heap.
-    void push(T value) {
+    void push(T const& value) {
         array_.push_back(value);
         sift_up(array_.size() - 1);
     }
 
     // [ ] Pop - must remove the smallest element from the heap.
-    void pop() {
+    T pop() {
+        T minVal = array_[0];
         if (array_.size() == 1) {
             array_.pop_back();
-            return;
+            return minVal;
         }
 
-        array_[0] = array_.back();
+        T last = array_.back();
         array_.pop_back();
+        array_[0] = last;
         sift_down(0);
-        return;
+        return minVal;
     }
 
     // [ ] Peek - must provide access to the smallest element in the heap.
-    T peek() {
+    T const& peek() const {
         return array_[0];
     }
 
