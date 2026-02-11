@@ -1,6 +1,6 @@
 #ifndef HEAP_H
 #define HEAP_H
-#include <DynamicallySizedArray.h>
+#include "DynamicallySizedArray.h"
 
 template <typename T> struct Heap2 {
     /*
@@ -33,7 +33,7 @@ template <typename T> struct Heap2 {
     void swap_array_values(int index1, int index2) {
         T tempVar = array_[index1];
         array_[index1] = array_[index2];
-        array_[index2] = array_[index1];
+        array_[index2] = tempVar;
     }
 
     void sift_up(int elem_index) {
@@ -104,14 +104,15 @@ template <typename T> struct Heap2 {
             return;
         }
 
-        array_[0] = array_.pop_back();
+        array_[0] = array_.back();
+        array_.pop_back();
         sift_down(0);
         return;
     }
 
     // [ ] Peek - must provide access to the smallest element in the heap.
     T peek() {
-        return array_[size_];
+        return array_[0];
     }
 
     // [x] Size - must provide the size of the heap. You must avoid any memory
