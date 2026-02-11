@@ -258,8 +258,8 @@ template <typename T> struct DynamicallySizedArray {
     }
 
     /**
-     * @brief Clear all elements, resetting to empty state. Capacity is
-     * unchanged.
+     * @brief Clear all elements, resetting to empty state. May shrink capacity
+     * if size_ is down to a quarter of capacity_.
      */
     void clear() {
         size_ = 0;
