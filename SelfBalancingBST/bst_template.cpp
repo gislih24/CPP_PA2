@@ -1,13 +1,13 @@
+#include "SelfBalancingBST.h"
 #include <cassert>
 #include <iostream>
-// #include "your_tree.h"
 
 using std::cin;
 using std::cout;
 using std::ws;
 
-your_tree_type<int, int> trees[1000];
-your_node_type<int, int>* cursors[1000];
+Treap<int, int> trees[1000];
+TreapNode<int, int>* cursors[1000];
 
 int main() {
     int q;
