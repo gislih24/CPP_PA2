@@ -3,22 +3,6 @@
 #include "DynamicallySizedArray.h"
 
 template <typename T> struct Heap2 {
-    /*
-    Write your own implementation of a heap, specialized to store 32-bit signed
-    integers. Heaps only have a few operations. The data structure should
-    support the following operations:
-
-    ◌ Default construction - initializes an empty heap. This is not tested
-      explicitly here!
-    ◌ Assignment and copy construction - must properly copy the contents of
-      another instance of the data structure. Ensure the two instances do not
-      share memory afterwards!
-    ◌ Push - must insert an element to the heap.
-    ◌ Pop - must remove the smallest element from the heap.
-    ◌ Peek - must provide access to the smallest element in the heap.
-    ◌ Size - must provide the size of the heap. You must avoid any memory leaks
-    or other memory errors in your implementation
-    */
   private:
     // We import DSA for DRY and frankly because it's optimized.
     DynamicallySizedArray<T> array_;
