@@ -4,7 +4,7 @@
 
 template <typename T> struct Heap2 {
   private:
-    // We import DSA for DRY and frankly because it's optimized.
+    // Import DSA for DRY.
     DynamicallySizedArray<T> array_;
 
     /**
