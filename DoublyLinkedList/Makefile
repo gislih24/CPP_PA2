@@ -1,22 +1,24 @@
 CXX := g++
 CXXFLAGS := -std=c++98 -O2 -Wall -Wextra -pedantic
+INCLUDES := -I.
 
-TARGET := kattis_dll
-SRCS := DoublyLinkedList.cpp kattis_dll_template.cpp
-OBJS := $(SRCS:.cpp=.o)
+BIN_DIR := bin
+TARGET := dll
+SRC := kattis_dll_template.cpp
+HDR := DoublyLinkedList.h
 
-.PHONY: all run clean
+.PHONY: all build run clean
 
-all: $(TARGET)
+all: build
 
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $^
+build: $(BIN_DIR)/$(TARGET)
 
-%.o: %.cpp DoublyLinkedList.h
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+$(BIN_DIR)/$(TARGET): $(SRC) $(HDR)
+	@mkdir -p $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $< -o $@
 
-run: $(TARGET)
-	./$(TARGET)
+run: $(BIN_DIR)/$(TARGET)
+	./$(BIN_DIR)/$(TARGET)
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -rf $(BIN_DIR)
