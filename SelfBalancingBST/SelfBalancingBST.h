@@ -27,25 +27,25 @@ template <typename K, typename V> class Treap {
      * @brief Helper function to get the size of the subtree rooted at the
      * given node.
      *
-     * @param treeNode Pointer to the node whose subtree size we want to get.
+     * @param tree_node Pointer to the node whose subtree size we want to get.
      *
      * @return Size of the subtree rooted at the given node. If the node is
      * NULL, returns 0.
      */
-    static int get_subtree_size(TNode* treeNode) {
-        if (treeNode == 0) {
+    static int get_subtree_size(TNode* tree_node) {
+        if (tree_node == 0) {
             return 0;
         } else {
-            return treeNode->subtree_size;
+            return tree_node->subtree_size;
         };
     }
 
     /**
      * @brief Helper function to update the subtree size of the given node.
      *
-     * Updates the size based on the sizes of its left and right children. This
-     * should be called after any modification to the subtree (like rotations or
-     * insertions) to ensure that the subtree sizes remain accurate.
+     * Updates the size based on the sizes of its left and right children.
+     * Called after any modification to the subtree so that sizer remain
+     * accurate.
      *
      * @param node Pointer to the node whose subtree size we want to update.
      */
@@ -175,16 +175,16 @@ template <typename K, typename V> class Treap {
      * @brief Recursively destroys the subtree rooted at the given node, freeing
      * all associated memory.
      *
-     * @param treeNode Pointer to the root of the subtree to be destroyed. If
+     * @param tree_node Pointer to the root of the subtree to be destroyed. If
      * the pointer is NULL, the function does nothing.
      */
-    static void destroy_subtree(TNode* treeNode) {
-        if (treeNode == 0) {
+    static void destroy_subtree(TNode* tree_node) {
+        if (tree_node == 0) {
             return;
         }
-        destroy_subtree(treeNode->left);
-        destroy_subtree(treeNode->right);
-        delete treeNode;
+        destroy_subtree(tree_node->left);
+        destroy_subtree(tree_node->right);
+        delete tree_node;
     }
 
     /**
@@ -249,7 +249,14 @@ template <typename K, typename V> class Treap {
         _root = 0;
     }
 
-    // Find node with exact key.
+    /**
+     * @brief Finds the node with the given key in the treap.
+     *
+     * @param key The key to search for in the treap.
+     *
+     * @return Pointer to the node with the given key if it exists in the treap;
+     * otherwise, returns NULL.
+     */
     TNode* find(const K& key) const {
         TNode* curr_node = _root;
         while (curr_node != 0) {
@@ -258,46 +265,76 @@ template <typename K, typename V> class Treap {
             } else if (curr_node->key < key) {
                 curr_node = curr_node->right;
             } else {
-                return curr_node;
+                return curr_node; // key found
             }
         }
         return 0;
     }
 
-    // Smallest key >= given key.
+    /**
+     * @brief Finds the node with the smallest key that is greater than or equal
+     * to the given key in the treap.
+     *
+     * @param key The key to compare against when searching for the lower bound
+     * in the treap.
+     *
+     * @return Pointer to the node with the smallest key that is greater than or
+     * equal to the given key if such a node exists in the treap; otherwise,
+     * returns NULL.
+     */
     TNode* lower_bound(const K& key) const {
         TNode* curr_node = _root;
-        TNode* bestNode = 0;
+        TNode* best_node = 0;
         while (curr_node != 0) {
             if (!(curr_node->key < key)) { // curr_node->key >= key
-                bestNode = curr_node;
+                best_node = curr_node;
                 curr_node = curr_node->left;
             } else {
                 curr_node = curr_node->right;
             }
         }
-        return bestNode;
+        return best_node;
     }
 
-    // Smallest key > given key.
+    /**
+     * @brief Finds the node with the smallest key that is strictly greater than
+     * the given key in the treap.
+     *
+     * @param key The key to compare against when searching for the upper bound
+     * in the treap.
+     *
+     * @return Pointer to the node with the smallest key that is strictly
+     * greater than the given key if such a node exists in the treap;
+     * otherwise, returns NULL.
+     */
     TNode* upper_bound(const K& key) const {
         TNode* curr_node = _root;
-        TNode* bestNode = 0;
+        TNode* best_node = 0;
         while (curr_node != 0) {
             if (key < curr_node->key) { // curr_node->key > key
-                bestNode = curr_node;
+                best_node = curr_node;
                 curr_node = curr_node->left;
             } else {
                 curr_node = curr_node->right;
             }
         }
-        return bestNode;
+        return best_node;
     }
 
-    // Inserts (key,value). If key exists, returns existing node (does not
-    // modify its value).
+    /**
+     * @brief Inserts a new node with the given key and value into the treap.
+     *
+     * If a node with the same key already exists, returns a pointer to that
+     * node without modifying the treap.
+     *
+     * @param key The key for the new node to be inserted into the treap.
+     * @param value The value for the new node to be inserted into the treap.
+     *
+     * @return Pointer to the newly inserted node if the key was not already
+     * present in the treap; otherwise, returns a pointer to the existing node
+     * with the same key.
+     */
     TNode* insert(const K& key, const V& value) {
-        // BST search for insertion point / existing key.
         TNode* parent = 0;
         TNode* curr_node = _root;
         while (curr_node != 0) {
@@ -311,9 +348,11 @@ template <typename K, typename V> class Treap {
             }
         }
 
+        // Create the new node with a random priority and link it to the parent.
         TNode* new_node = new TNode(key, value, next_priority());
         new_node->parent = parent;
 
+        // Link new node to parent.
         if (parent == 0) {
             _root = new_node;
         } else if (key < parent->key) {
@@ -325,7 +364,8 @@ template <typename K, typename V> class Treap {
         // Fix subtree sizes up from the parent.
         pull_up(parent);
 
-        // Restore heap property (bubble up).
+        // Restore heap property by rotating the new node up until it's in the
+        // correct position.
         while (new_node->parent != 0 &&
                new_node->priority < new_node->parent->priority) {
             if (new_node == new_node->parent->left) {
@@ -340,7 +380,13 @@ template <typename K, typename V> class Treap {
         return new_node;
     }
 
-    // Erase the given node. If node is NULL, does nothing.
+    /**
+     * @brief Removes the given node from the treap while maintaining the
+     * treap's properties.
+     *
+     * @param node Pointer to the node that should be removed from the treap. If
+     * the pointer is NULL, the function does nothing.
+     */
     void erase(TNode* node) {
         if (node == 0) {
             return;
@@ -359,7 +405,7 @@ template <typename K, typename V> class Treap {
             }
         }
 
-        // Detach leaf and delete.
+        // Detach the leaf node from its parent and delete it.
         TNode* parent = node->parent;
         if (parent == 0) {
             _root = 0;
@@ -373,7 +419,14 @@ template <typename K, typename V> class Treap {
         pull_up(parent);
     }
 
-    // Minimum key node.
+    /**
+     * @brief Finds the node with the smallest key in the treap.
+     *
+     * This is the front element in an in-order traversal of the treap.
+     *
+     * @return Pointer to the node with the smallest key in the treap if the
+     * treap is not empty; otherwise, returns NULL.
+     */
     TNode* front() const {
         TNode* curr_node = _root;
         if (curr_node == 0) {
@@ -386,7 +439,14 @@ template <typename K, typename V> class Treap {
         return curr_node;
     }
 
-    // Maximum key node.
+    /**
+     * @brief Finds the node with the largest key in the treap.
+     *
+     * This is the back element in an in-order traversal of the treap.
+     *
+     * @return Pointer to the node with the largest key in the treap if the
+     * treap is not empty; otherwise, returns NULL.
+     */
     TNode* back() const {
         TNode* curr_node = _root;
         if (curr_node == 0) {
@@ -399,12 +459,24 @@ template <typename K, typename V> class Treap {
         return curr_node;
     }
 
-    // In-order successor.
+    /**
+     * @brief Finds the in-order successor of the given node in the treap.
+     *
+     * This is the node with the smallest key that is greater than the given
+     * node's key.
+     *
+     * @param node Pointer to the node whose in-order successor we want to find.
+     *
+     * @return Pointer to the in-order successor of the given node if it exists
+     * in the treap; otherwise, returns NULL.
+     */
     TNode* successor(TNode* node) const {
         if (node == 0) {
             return 0;
         }
 
+        // If there's a right child, the successor is the leftmost node in the
+        // right subtree.
         if (node->right != 0) {
             TNode* curr_node = node->right;
             while (curr_node->left != 0) {
@@ -412,6 +484,8 @@ template <typename K, typename V> class Treap {
             }
             return curr_node;
         }
+        // Otherwise, the successor is the lowest ancestor of the node whose
+        // left child is also an ancestor of the node.
         TNode* curr_node = node;
         TNode* parent_node = curr_node->parent;
         while (parent_node != 0 && curr_node == parent_node->right) {
@@ -421,7 +495,15 @@ template <typename K, typename V> class Treap {
         return parent_node;
     }
 
-    // In-order predecessor.
+    /**
+     * @brief Finds the in-order predecessor of the given node in the treap.
+     *
+     * @param node Pointer to the node whose in-order predecessor we want to
+     * find.
+     *
+     * @return Pointer to the in-order predecessor of the given node if it
+     * exists in the treap; otherwise, returns NULL.
+     */
     TNode* predecessor(TNode* node) const {
         if (node == 0) {
             return 0;
@@ -442,7 +524,17 @@ template <typename K, typename V> class Treap {
         return parent_node;
     }
 
-    // Number of nodes with a key smaller than a node's key.
+    /**
+     * @brief Calculates the in-order rank of the given node in the treap
+     *
+     * This is the number of nodes in the treap that have keys less than the
+     * given node's key.
+     *
+     * @param node Pointer to the node whose in-order rank we want to calculate.
+     *
+     * @return The in-order rank of the given node in the treap if the node
+     * exists in the treap; otherwise, returns -1.
+     */
     int rank(TNode* node) const {
         if (node == 0) {
             return -1;
@@ -459,13 +551,24 @@ template <typename K, typename V> class Treap {
         return r;
     }
 
-    // Node with in-order index k (0-based). Returns NULL if out of range.
+    /**
+     * @brief Finds the node with the k-th smallest key in the treap.
+     *
+     * @param k The 0-based index of the node to find based on in-order
+     * traversal of the treap.
+     *
+     * @return Pointer to the node with the k-th smallest key in the treap if
+     * such a node exists (i.e., if k is within the valid range of 0 to size-1);
+     * otherwise, returns NULL.
+     */
     TNode* kth(int k) const {
         if (k < 0 || k >= get_subtree_size(_root)) {
             return 0;
         }
 
         TNode* curr_node = _root;
+        // At each step, we check the size of the left subtree to determine
+        // whether to go left, right, or return the current node.
         while (curr_node != 0) {
             int left_sz = get_subtree_size(curr_node->left);
             if (k < left_sz) {
@@ -480,17 +583,7 @@ template <typename K, typename V> class Treap {
         return 0;
     }
 
-    // Optional: map-like element access (inserts default V() if missing).
-    V& operator[](const K& key) {
-        TNode* treeNode = find(key);
-        if (treeNode != 0) {
-            return treeNode->value;
-        }
-        treeNode = insert(key, V());
-        return treeNode->value;
-    }
-
-    // Optional alias for some specifications.
+    // Alias, just in case.
     TNode* kth_element(int k) const {
         return kth(k);
     }
