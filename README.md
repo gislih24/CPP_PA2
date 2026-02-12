@@ -128,43 +128,24 @@ A dynamically resizing double-ended queue template implemented without STL conta
 **Complexities**
 - `push_front`/`push_back`/`pop_front`/`pop_back`: amortized $O(1)$; $O(n)$ when resizing
 - Access (`[]`, `at`, `front`, `back`): $O(1)$
-- `reserve`: $O(n)` reallocation/copy
-- `resize`: $O(n)` when growing; $O(1)` when shrinking (plus shrink check)
+- `reserve`: $O(n)$ reallocation/copy
+- `resize`: $O(n)$ when growing; $O(1)$ when shrinking (plus shrink check)
 
 **Notes / assumptions**
 - Middle `insert/erase` are not included (focus is end-operations).
 - C++98-only, uses `<cassert>`; assertions guard bounds and state.
 
-## How to compile and run (DoublyLinkedList / Kattis template)
+## How to compile and run (DoublyLinkedList)
 
-Because `DoublyLinkedList` is templated, you typically only need `DoublyLinkedList.h`.
-
-If your submission includes a Makefile (recommended for the final ZIP), you can expose a target for this test program, e.g.:
+From the `DoublyLinkedList/` folder (uses its Makefile):
 
 ```bash
-make dll_test
-./dll_test < input.txt
+make
+./bin/dll < sample1.txt
+./bin/dll < sample2.txt
 ```
 
-Otherwise, compile directly using the course-provided Kattis template.
-
-1) Put `DoublyLinkedList.h` next to the provided Kattis template file (usually named `kattis_dll_template.cpp`).
-
-2) Compile:
-
-```bash
-g++ -std=c++98 -Wall -Wextra -pedantic -O2 kattis_dll_template.cpp -o dll_test
-```
-
-3) Run:
-
-```bash
-./dll_test < input.txt
-```
-
-To verify against the sample from the PDF, put the sample input into `input.txt` and check that the output matches exactly.
-
-## How to compile and run (DynamicallySizedArray / Makefile)
+## How to compile and run (DynamicallySizedArray)
 
 From the `DynamicallySizedArray/` folder (uses its Makefile):
 
@@ -175,7 +156,7 @@ make
 ./bin/dsa < sample3.txt
 ```
 
-## How to compile and run (Dequeue / Makefile)
+## How to compile and run (Dequeue)
 
 From the `Dequeue/` folder (uses its Makefile):
 
