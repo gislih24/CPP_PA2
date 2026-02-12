@@ -26,12 +26,12 @@ template <typename T> struct DoublyLinkedList {
      */
     Node<T> sentinel;
     // Size of the list.
-    int listSize;
+    int list_size;
 
     /**
      * @brief Clears the list, freeing all allocated memory.
      */
-    void clearList() {
+    void clear_list() {
         Node<T>* current = sentinel.next;
         while (current != &sentinel) {
             Node<T>* next = current->next;
@@ -40,7 +40,7 @@ template <typename T> struct DoublyLinkedList {
         }
         sentinel.next = &sentinel;
         sentinel.prev = &sentinel;
-        listSize = 0;
+        list_size = 0;
     }
 
     /**
@@ -48,7 +48,7 @@ template <typename T> struct DoublyLinkedList {
      *
      * @param other The list to be copied.
      */
-    void copyOtherList(DoublyLinkedList const& other) {
+    void copy_other_list(DoublyLinkedList const& other) {
         Node<T>* cur = other.sentinel.next;
         while (cur != &other.sentinel) {
             insert(&sentinel, cur->data); // append at end
@@ -60,11 +60,11 @@ template <typename T> struct DoublyLinkedList {
     /**
      * @brief Constructor that initializes an empty list.
      */
-    DoublyLinkedList() : listSize(0) {};
+    DoublyLinkedList() : list_size(0) {};
 
     // Copy Constructor
-    DoublyLinkedList(DoublyLinkedList const& other) : listSize(0) {
-        copyOtherList(other);
+    DoublyLinkedList(DoublyLinkedList const& other) : list_size(0) {
+        copy_other_list(other);
     }
 
     /**
@@ -79,14 +79,14 @@ template <typename T> struct DoublyLinkedList {
             return *this;
         }
 
-        clearList();
-        copyOtherList(other);
+        clear_list();
+        copy_other_list(other);
         return *this;
     }
 
     // Destructor
     ~DoublyLinkedList() {
-        clearList();
+        clear_list();
     }
 
     // Return the first node(head) of the list, not a sentinel node.
@@ -120,15 +120,15 @@ template <typename T> struct DoublyLinkedList {
     Node<T>* insert(Node<T>* cursor, T const& data) {
         // "Node<T>*&" means "a reference to a pointer to a Node<T>". So we're
         // changing that pointer directly.
-        Node<T>* newNode = new Node<T>(data);
+        Node<T>* new_node = new Node<T>(data);
 
-        newNode->prev = cursor->prev;
-        newNode->next = cursor;
-        cursor->prev->next = newNode;
-        cursor->prev = newNode;
+        new_node->prev = cursor->prev;
+        new_node->next = cursor;
+        cursor->prev->next = new_node;
+        cursor->prev = new_node;
 
-        listSize++;
-        return newNode;
+        list_size++;
+        return new_node;
     }
 
     /**
@@ -147,7 +147,7 @@ template <typename T> struct DoublyLinkedList {
         cursor->next->prev = cursor->prev;
 
         delete cursor;
-        --listSize;
+        --list_size;
         return after;
     }
 
@@ -163,7 +163,7 @@ template <typename T> struct DoublyLinkedList {
 
     // Return the size of the instance
     int size() const {
-        return listSize;
+        return list_size;
     }
 };
 

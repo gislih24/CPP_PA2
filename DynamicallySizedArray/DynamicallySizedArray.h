@@ -21,7 +21,7 @@ template <typename T> struct DynamicallySizedArray {
     /**
      * @brief Frees the buffer and resets to an empty state.
      */
-    void freeBuffer() {
+    void free_buffer() {
         delete[] data_;
         data_ = 0;
         size_ = 0;
@@ -32,7 +32,7 @@ template <typename T> struct DynamicallySizedArray {
      * @brief Copies contents from another array.
      * @param other is the array to copy from.
      */
-    void copyFromOther(DynamicallySizedArray const& other) {
+    void copy_from_other(DynamicallySizedArray const& other) {
         reserve(other.capacity_);
         for (int i = 0; i < other.size_; ++i) {
             data_[i] = other.data_[i];
@@ -44,7 +44,7 @@ template <typename T> struct DynamicallySizedArray {
      * @brief Shrinks capacity when size_ is down to a quarter of capacity_.
      *        Uses halving to avoid thrashing; ensures capacity_ >= size_.
      */
-    void shrinkIfNeeded() {
+    void shrink_if_needed() {
         // Don't shrink below 16 to avoid "thrashing" on small sizes.
         if (capacity_ <= 16) {
             return;
@@ -54,25 +54,26 @@ template <typename T> struct DynamicallySizedArray {
             return;
         }
 
-        int newCap = capacity_ / 2;
+        int new_cap = capacity_ / 2;
         // Don't shrink below 16.
-        if (newCap < 16) {
-            newCap = 16;
+        if (new_cap < 16) {
+            new_cap = 16;
         }
-        // Ensure newCap is at least size_ to maintain invariants.
-        if (newCap < size_) {
-            newCap = size_;
+        // Ensure new_cap is at least size_ to maintain invariants.
+        if (new_cap < size_) {
+            new_cap = size_;
         }
 
-        T* newData = new T[newCap]; // Allocate new array with smaller capacity
+        T* new_data =
+            new T[new_cap]; // Allocate new array with smaller capacity
         // Copy assign existing elements to new array
         for (int i = 0; i < size_; ++i) {
-            newData[i] = data_[i];
+            new_data[i] = data_[i];
         }
         // Free old array and update pointers and capacity
         delete[] data_;
-        data_ = newData;
-        capacity_ = newCap;
+        data_ = new_data;
+        capacity_ = new_cap;
     }
 
     /**
@@ -81,17 +82,17 @@ template <typename T> struct DynamicallySizedArray {
      * @param other The array to swap with.
      */
     void swap(DynamicallySizedArray& other) {
-        T* tData = data_;
+        T* t_data = data_;
         data_ = other.data_;
-        other.data_ = tData;
+        other.data_ = t_data;
 
-        int tSize = size_;
+        int t_size = size_;
         size_ = other.size_;
-        other.size_ = tSize;
+        other.size_ = t_size;
 
-        int tCap = capacity_;
+        int t_cap = capacity_;
         capacity_ = other.capacity_;
-        other.capacity_ = tCap;
+        other.capacity_ = t_cap;
     }
 
   public:
@@ -101,7 +102,7 @@ template <typename T> struct DynamicallySizedArray {
     // Deep copy
     DynamicallySizedArray(DynamicallySizedArray const& other)
         : data_(0), size_(0), capacity_(0) {
-        copyFromOther(other);
+        copy_from_other(other);
     }
 
     // Assignment operator: deep copy
@@ -122,7 +123,7 @@ template <typename T> struct DynamicallySizedArray {
 
     // Destructor
     ~DynamicallySizedArray() {
-        freeBuffer();
+        free_buffer();
     }
 
     // Size and capacity
@@ -183,22 +184,22 @@ template <typename T> struct DynamicallySizedArray {
     }
 
     /**
-     * @brief Reserves capacity for at least newCapacity elements. Does not
-     * change size_. If newCapacity <= capacity_, does nothing.
-     * @param newCapacity Desired capacity (>= 0).
+     * @brief Reserves capacity for at least new_capacity elements. Does not
+     * change size_. If new_capacity <= capacity_, does nothing.
+     * @param new_capacity Desired capacity (>= 0).
      */
-    void reserve(int newCapacity) {
-        if (newCapacity <= capacity_) {
+    void reserve(int new_capacity) {
+        if (new_capacity <= capacity_) {
             return;
         }
-        T* newData = new T[newCapacity];
+        T* new_data = new T[new_capacity];
         // Copy assign existing elements
         for (int i = 0; i < size_; ++i) {
-            newData[i] = data_[i];
+            new_data[i] = data_[i];
         }
         delete[] data_;
-        data_ = newData;
-        capacity_ = newCapacity;
+        data_ = new_data;
+        capacity_ = new_capacity;
     }
 
     /**
@@ -207,8 +208,8 @@ template <typename T> struct DynamicallySizedArray {
      */
     void push_back(T const& value) {
         if (size_ == capacity_) {
-            int newCap = (capacity_ == 0) ? 1 : (capacity_ * 2);
-            reserve(newCap);
+            int new_cap = (capacity_ == 0) ? 1 : (capacity_ * 2);
+            reserve(new_cap);
         }
         data_[size_++] = value;
     }
@@ -220,7 +221,7 @@ template <typename T> struct DynamicallySizedArray {
     void pop_back() {
         assert(size_ > 0);
         --size_;
-        shrinkIfNeeded();
+        shrink_if_needed();
     }
 
     /**
@@ -232,8 +233,8 @@ template <typename T> struct DynamicallySizedArray {
     void insert(int index, T const& value) {
         assert(index >= 0 && index <= size_);
         if (size_ == capacity_) {
-            int newCap = (capacity_ == 0) ? 1 : (capacity_ * 2);
-            reserve(newCap);
+            int new_cap = (capacity_ == 0) ? 1 : (capacity_ * 2);
+            reserve(new_cap);
         }
         // Shift right from end to index
         for (int i = size_; i > index; --i) {
@@ -255,7 +256,7 @@ template <typename T> struct DynamicallySizedArray {
             data_[i] = data_[i + 1];
         }
         --size_;
-        shrinkIfNeeded();
+        shrink_if_needed();
     }
 
     /**
@@ -267,17 +268,17 @@ template <typename T> struct DynamicallySizedArray {
         assert(newSize >= 0);
         if (newSize <= size_) {
             size_ = newSize;
-            shrinkIfNeeded();
+            shrink_if_needed();
             return;
         }
         // Need to grow; ensure capacity
         if (newSize > capacity_) {
             // Grow to at least newSize; doubling strategy
-            int newCap = (capacity_ == 0) ? 1 : capacity_;
-            while (newCap < newSize) {
-                newCap *= 2;
+            int new_cap = (capacity_ == 0) ? 1 : capacity_;
+            while (new_cap < newSize) {
+                new_cap *= 2;
             }
-            reserve(newCap);
+            reserve(new_cap);
         }
         // Default-initialize new elements
         for (int i = size_; i < newSize; ++i) {
@@ -292,7 +293,7 @@ template <typename T> struct DynamicallySizedArray {
      */
     void clear() {
         size_ = 0;
-        shrinkIfNeeded();
+        shrink_if_needed();
     }
 };
 
