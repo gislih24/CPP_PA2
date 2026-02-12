@@ -1,5 +1,3 @@
-# Build and run the dynamic array locally (C++98)
-
 CXX := g++
 CXXFLAGS := -std=c++98 -O2 -Wall -Wextra -pedantic
 INCLUDES := -I.

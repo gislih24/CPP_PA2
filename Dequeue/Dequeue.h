@@ -17,7 +17,7 @@ template <typename T> struct Dequeue {
     T* data_;
     int size_;
     int capacity_;
-        int head_;
+    int head_;
 
     /**
      * @brief Frees the buffer and resets to an empty state.
@@ -32,15 +32,18 @@ template <typename T> struct Dequeue {
 
     /**
      * @brief Copies contents from another array.
+     *
      * @param other is the array to copy from.
      */
     void copyFromOther(Dequeue const& other) {
-        // Ensure capacity can hold the other's elements; preserve other's capacity
+        // Ensure capacity can hold the other's elements; preserve other's
+        // capacity
         if (other.capacity_ > capacity_) {
             reserve(other.capacity_);
         }
         for (int i = 0; i < other.size_; ++i) {
-            int phys = (other.head_ + i) % (other.capacity_ == 0 ? 1 : other.capacity_);
+            int phys = (other.head_ + i) %
+                       (other.capacity_ == 0 ? 1 : other.capacity_);
             data_[i] = other.data_[phys];
         }
         size_ = other.size_;
@@ -86,7 +89,7 @@ template <typename T> struct Dequeue {
 
     /**
      * @brief Swaps the contents of this array with another array.
-
+     *
      * @param other The array to swap with.
      */
     void swap(Dequeue& other) {
@@ -112,8 +115,7 @@ template <typename T> struct Dequeue {
     Dequeue() : data_(0), size_(0), capacity_(0), head_(0) {}
 
     // Deep copy
-    Dequeue(Dequeue const& other)
-        : data_(0), size_(0), capacity_(0), head_(0) {
+    Dequeue(Dequeue const& other) : data_(0), size_(0), capacity_(0), head_(0) {
         copyFromOther(other);
     }
 
@@ -200,11 +202,10 @@ template <typename T> struct Dequeue {
         return data_[phys];
     }
 
-    
-
     /**
      * @brief Reserves capacity for at least newCapacity elements. Does not
      * change size_. If newCapacity <= capacity_, does nothing.
+     *
      * @param newCapacity Desired capacity (>= 0).
      */
     void reserve(int newCapacity) {
@@ -225,6 +226,7 @@ template <typename T> struct Dequeue {
 
     /**
      * @brief Append value to end. Grows capacity if needed.
+     *
      * @param value Element to append.
      */
     void push_back(T const& value) {
@@ -236,9 +238,10 @@ template <typename T> struct Dequeue {
         data_[phys] = value;
         ++size_;
     }
-    
+
     /**
      * @brief Append value to front. Grows capacity if needed.
+     *
      * @param value Element to add.
      */
     void push_front(T const& value) {
@@ -260,7 +263,7 @@ template <typename T> struct Dequeue {
         --size_;
         shrinkIfNeeded();
     }
-    
+
     /**
      * @brief Remove first element. Does not change capacity, but may shrink if
      *        size_ is down to a quarter of capacity_.
@@ -310,6 +313,7 @@ template <typename T> struct Dequeue {
     /**
      * @brief Resize to newSize. If growing, fill new slots with default values.
      *        Capacity may grow to accommodate, but is otherwise unchanged.
+     *
      * @param newSize Desired size (>= 0).
      */
     void resize(int newSize) {
@@ -336,14 +340,15 @@ template <typename T> struct Dequeue {
         size_ = newSize;
     }
 
-//     /**
-//      * @brief Clear all elements, resetting to empty state. May shrink capacity
-//      * if size_ is down to a quarter of capacity_.
-//      */
-//     void clear() {
-//         size_ = 0;
-//         shrinkIfNeeded();
-//     }
+    //     /**
+    //      * @brief Clear all elements, resetting to empty state. May shrink
+    //      capacity
+    //      * if size_ is down to a quarter of capacity_.
+    //      */
+    //     void clear() {
+    //         size_ = 0;
+    //         shrinkIfNeeded();
+    //     }
 };
 
 #endif // DEQUEUE_H
