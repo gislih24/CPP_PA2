@@ -17,6 +17,7 @@ template <typename T> struct Dequeue {
     T* data_;
     int size_;
     int capacity_;
+        int head_;
 
     /**
      * @brief Frees the buffer and resets to an empty state.
@@ -26,6 +27,7 @@ template <typename T> struct Dequeue {
         data_ = 0;
         size_ = 0;
         capacity_ = 0;
+        head_ = 0;
     }
 
     /**
@@ -33,11 +35,16 @@ template <typename T> struct Dequeue {
      * @param other is the array to copy from.
      */
     void copyFromOther(Dequeue const& other) {
-        reserve(other.capacity_);
+        // Ensure capacity can hold the other's elements; preserve other's capacity
+        if (other.capacity_ > capacity_) {
+            reserve(other.capacity_);
+        }
         for (int i = 0; i < other.size_; ++i) {
-            data_[i] = other.data_[i];
+            int phys = (other.head_ + i) % (other.capacity_ == 0 ? 1 : other.capacity_);
+            data_[i] = other.data_[phys];
         }
         size_ = other.size_;
+        head_ = 0;
     }
 
     /**
@@ -65,14 +72,16 @@ template <typename T> struct Dequeue {
         }
 
         T* newData = new T[newCap]; // Allocate new array with smaller capacity
-        // Copy assign existing elements to new array
+        // Copy existing elements in logical order starting at head_
         for (int i = 0; i < size_; ++i) {
-            newData[i] = data_[i];
+            int phys = (head_ + i) % (capacity_ == 0 ? 1 : capacity_);
+            newData[i] = data_[phys];
         }
         // Free old array and update pointers and capacity
         delete[] data_;
         data_ = newData;
         capacity_ = newCap;
+        head_ = 0;
     }
 
     /**
@@ -92,15 +101,19 @@ template <typename T> struct Dequeue {
         int tCap = capacity_;
         capacity_ = other.capacity_;
         other.capacity_ = tCap;
+
+        int tHead = head_;
+        head_ = other.head_;
+        other.head_ = tHead;
     }
 
   public:
     // Constructor: empty array
-    Dequeue() : data_(0), size_(0), capacity_(0) {}
+    Dequeue() : data_(0), size_(0), capacity_(0), head_(0) {}
 
     // Deep copy
     Dequeue(Dequeue const& other)
-        : data_(0), size_(0), capacity_(0) {
+        : data_(0), size_(0), capacity_(0), head_(0) {
         copyFromOther(other);
     }
 
@@ -132,11 +145,28 @@ template <typename T> struct Dequeue {
     int capacity() const {
         return capacity_;
     }
-    int front() const {
-        std::cout << data_[0] << '\n'
+    // front accessors
+    T& front() {
+        assert(size_ > 0);
+        return data_[head_];
     }
-    int back() const {
-        std::cout << data_[size_] << '\n'
+    // const version of front()
+    T const& front() const {
+        assert(size_ > 0);
+        return data_[head_];
+    }
+
+    // back() accessors
+    T& back() {
+        assert(size_ > 0);
+        int phys = (head_ + size_ - 1) % (capacity_ == 0 ? 1 : capacity_);
+        return data_[phys];
+    }
+    // const version of back()
+    T const& back() const {
+        assert(size_ > 0);
+        int phys = (head_ + size_ - 1) % (capacity_ == 0 ? 1 : capacity_);
+        return data_[phys];
     }
     bool empty() const {
         return size_ == 0;
@@ -145,12 +175,14 @@ template <typename T> struct Dequeue {
     // Element access
     T& operator[](int index) {
         assert(index >= 0 && index < size_);
-        return data_[index];
+        int phys = (head_ + index) % (capacity_ == 0 ? 1 : capacity_);
+        return data_[phys];
     }
     // const version of operator[]
     T const& operator[](int index) const {
         assert(index >= 0 && index < size_);
-        return data_[index];
+        int phys = (head_ + index) % (capacity_ == 0 ? 1 : capacity_);
+        return data_[phys];
     }
 
     // Alternative element accessors with bounds checking and front/back access
@@ -158,35 +190,17 @@ template <typename T> struct Dequeue {
     // at() accessors with bounds checking.
     T& at(int index) {
         assert(index >= 0 && index < size_);
-        return data_[index];
+        int phys = (head_ + index) % (capacity_ == 0 ? 1 : capacity_);
+        return data_[phys];
     }
     // const version of at()
     T const& at(int index) const {
         assert(index >= 0 && index < size_);
-        return data_[index];
+        int phys = (head_ + index) % (capacity_ == 0 ? 1 : capacity_);
+        return data_[phys];
     }
 
-    // front accessors
-    T& front() {
-        assert(size_ > 0);
-        return data_[0];
-    }
-    // const version of front()
-    T const& front() const {
-        assert(size_ > 0);
-        return data_[0];
-    }
-
-    // back() accessors
-    T& back() {
-        assert(size_ > 0);
-        return data_[size_ - 1];
-    }
-    // const version of back()
-    T const& back() const {
-        assert(size_ > 0);
-        return data_[size_ - 1];
-    }
+    
 
     /**
      * @brief Reserves capacity for at least newCapacity elements. Does not
@@ -198,13 +212,15 @@ template <typename T> struct Dequeue {
             return;
         }
         T* newData = new T[newCapacity];
-        // Copy assign existing elements
+        // Copy existing elements in logical order starting at head_
         for (int i = 0; i < size_; ++i) {
-            newData[i] = data_[i];
+            int phys = (head_ + i) % (capacity_ == 0 ? 1 : capacity_);
+            newData[i] = data_[phys];
         }
         delete[] data_;
         data_ = newData;
         capacity_ = newCapacity;
+        head_ = 0;
     }
 
     /**
@@ -216,7 +232,9 @@ template <typename T> struct Dequeue {
             int newCap = (capacity_ == 0) ? 1 : (capacity_ * 2);
             reserve(newCap);
         }
-        data_[size_++] = value;
+        int phys = (head_ + size_) % capacity_;
+        data_[phys] = value;
+        ++size_;
     }
     
     /**
@@ -228,11 +246,8 @@ template <typename T> struct Dequeue {
             int newCap = (capacity_ == 0) ? 1 : (capacity_ * 2);
             reserve(newCap);
         }
-        // Shift right to make room at index 0
-        for (int i = size_; i > 0; --i) {
-            data_[i] = data_[i - 1];
-        }
-        data_[0] = value;
+        head_ = (head_ - 1 + capacity_) % capacity_;
+        data_[head_] = value;
         ++size_;
     }
 
@@ -252,9 +267,7 @@ template <typename T> struct Dequeue {
      */
     void pop_front() {
         assert(size_ > 0);
-        for (int i = 0; i < size_ - 1; ++i) {
-            data_[i] = data_[i + 1];
-        }
+        head_ = (head_ + 1) % capacity_;
         --size_;
         shrinkIfNeeded();
     }
@@ -315,9 +328,10 @@ template <typename T> struct Dequeue {
             }
             reserve(newCap);
         }
-        // Default-initialize new elements
+        // Default-initialize new elements in logical order
         for (int i = size_; i < newSize; ++i) {
-            data_[i] = T();
+            int phys = (head_ + i) % capacity_;
+            data_[phys] = T();
         }
         size_ = newSize;
     }
@@ -330,6 +344,6 @@ template <typename T> struct Dequeue {
 //         size_ = 0;
 //         shrinkIfNeeded();
 //     }
-// };
+};
 
 #endif // DEQUEUE_H

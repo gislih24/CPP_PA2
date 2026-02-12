@@ -6,6 +6,7 @@
 using std::cin;
 using std::cout;
 using std::ws;
+using std::string;
 
 // Bind the placeholder type used by the template to your implementation
 typedef Dequeue<int> your_array_type;
@@ -20,12 +21,12 @@ int main() {
         int instance;
         cin >> instance;
         instance--; // change to 0-based index
-        // consume whitespace before reading character, otherwise we get a space
+        // consume any whitespace before reading the operation token
         cin >> ws;
-        char op;
-        cin >> op; // read operation character
+        string op;
+        cin >> op; // read operation token (e.g., +f, -b, a, f, b, s)
 
-        if (op == 'a') {
+        if (op == "a") {
             int other;
             cin >> other;
             other--; // change to 0-based index
@@ -35,7 +36,7 @@ int main() {
             int value;
             cin >> value;
             // push front
-            vecs[instance].push_front(value)
+            vecs[instance].push_front(value);
         } else if (op == "+b") {
             int value;
             cin >> value;
@@ -47,18 +48,14 @@ int main() {
         } else if (op == "-b") {
             // pop back
             vecs[instance].pop_back();
-        } else if (op == 'f') {
-            int index;
-            cin >> index;
-            // get
-            vecs[instance]front();
-        } else if (op == 'b') {
-            int index;
-            cin >> index;
-            // get
-            vecs[instance]back();
-        } else if (op == 's') {
-            vecs[instance].size(;)
+        } else if (op == "f") {
+            // output front element
+            cout << vecs[instance].front() << '\n';
+        } else if (op == "b") {
+            // output back element
+            cout << vecs[instance].back() << '\n';
+        } else if (op == "s") {
+            cout << vecs[instance].size() << '\n';
         } else {
             assert(false);
         }
