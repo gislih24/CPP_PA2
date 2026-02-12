@@ -2,7 +2,7 @@
 
 This repository contains a small data-structure library implemented for Reykjavík University’s **PA2 – Data Structures** assignment.
 
-> **Status:** This README currently documents the **DoublyLinkedList** only (more structures can be added later).
+> **Status:** This README documents **DoublyLinkedList**, **DynamicallySizedArray**, and **Dequeue**.
 
 ## Authors
 
@@ -69,6 +69,72 @@ In this implementation, the sentinel is returned by `back()` (and the alias `sen
 - If the list is empty, `front()` returns the sentinel node (`sentinel.next == &sentinel`).
   - The Kattis input guarantees it won’t request invalid operations (e.g., `get`/`erase` on the sentinel), so this is safe for the intended tests.
 
+### 2) DynamicallySizedArray
+
+A dynamically resizing array template implemented without STL containers.
+
+**Files**
+- `DynamicallySizedArray.h` – templated implementation (all logic lives here).
+- `kattis_dsa_template.cpp` – interactive driver used locally and for Kattis.
+- `Makefile` (in the `DynamicallySizedArray/` folder) – local build targets.
+- Sample inputs: `sample1.txt`, `sample2.txt`, `sample3.txt`
+
+**Data model**
+- Contiguous buffer `data_` of `T`
+- Integers `size_` and `capacity_`
+
+**Growth / shrink**
+- Doubles capacity on growth (0→1, then ×2) during `push_back`, `insert`, or `resize` when needed.
+- Halves capacity when `size_ <= capacity_ / 4`, never below 16 and never below `size_` (avoids thrashing).
+
+**API summary**
+- Construction / copy / assignment / destructor: deep-copy semantics via copy-and-swap.
+- Accessors: `operator[]`, `at()`, `front()`, `back()`, `size()`, `capacity()`, `empty()`.
+- Modifiers: `push_back()`, `pop_back()`, `insert(index, value)`, `erase(index)`, `reserve(n)`, `resize(n)`, `clear()`.
+
+**Complexities**
+- `operator[]`, `at()`, `front()`, `back()`: $O(1)$
+- `push_back()`: amortized $O(1)$; $O(n)$ when growing
+- `insert`/`erase`: $O(n)$ (shifts)
+- `reserve`: $O(n)$ (reallocation/copy)
+- `resize`: $O(n)$ when growing; $O(1)$ when shrinking (plus shrink check)
+
+**Notes / assumptions**
+- C++98-only, uses `<cassert>`; bounds are asserted in debug builds.
+- `resize()` growing default-initializes new elements with `T()`.
+
+### 3) Dequeue
+
+A dynamically resizing double-ended queue template implemented without STL containers, using a circular buffer.
+
+**Files**
+- `Dequeue.h` – templated implementation.
+- `kattis_dequeue_template.cpp` – interactive driver for local runs/Kattis.
+- `Makefile` (in the `Dequeue/` folder) – local build targets.
+
+**Data model**
+- Circular buffer `data_` with `head_` (logical start), `size_`, and `capacity_`
+- Logical index maps to physical via `(head_ + index) % capacity_`
+
+**Growth / shrink**
+- Doubles capacity on `push_front`/`push_back` when full; data is re-linearized with `head_ = 0`.
+- Halves capacity when `size_ <= capacity_ / 4`, never below 16 and never below `size_`; re-linearizes with `head_ = 0`.
+
+**API summary**
+- Construction / copy / assignment / destructor: deep-copy via copy-and-swap.
+- Accessors: `front()`, `back()`, `operator[]`, `at()`, `size()`, `capacity()`, `empty()`.
+- Modifiers: `push_front()`, `push_back()`, `pop_front()`, `pop_back()`, `reserve(n)`, `resize(n)`.
+
+**Complexities**
+- `push_front`/`push_back`/`pop_front`/`pop_back`: amortized $O(1)$; $O(n)$ when resizing
+- Access (`[]`, `at`, `front`, `back`): $O(1)$
+- `reserve`: $O(n)` reallocation/copy
+- `resize`: $O(n)` when growing; $O(1)` when shrinking (plus shrink check)
+
+**Notes / assumptions**
+- Middle `insert/erase` are not included (focus is end-operations).
+- C++98-only, uses `<cassert>`; assertions guard bounds and state.
+
 ## How to compile and run (DoublyLinkedList / Kattis template)
 
 Because `DoublyLinkedList` is templated, you typically only need `DoublyLinkedList.h`.
@@ -97,6 +163,26 @@ g++ -std=c++98 -Wall -Wextra -pedantic -O2 kattis_dll_template.cpp -o dll_test
 ```
 
 To verify against the sample from the PDF, put the sample input into `input.txt` and check that the output matches exactly.
+
+## How to compile and run (DynamicallySizedArray / Makefile)
+
+From the `DynamicallySizedArray/` folder (uses its Makefile):
+
+```bash
+make
+./bin/dsa < sample1.txt
+./bin/dsa < sample2.txt
+./bin/dsa < sample3.txt
+```
+
+## How to compile and run (Dequeue / Makefile)
+
+From the `Dequeue/` folder (uses its Makefile):
+
+```bash
+make
+./bin/dequeue < your_input.txt
+```
 
 ## Helpful debugging commands
 
