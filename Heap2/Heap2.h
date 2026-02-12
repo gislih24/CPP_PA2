@@ -16,8 +16,7 @@ template <typename T> struct Heap2 {
      * all nodes in the heap.
      */
     void heapify(int index) {
-        last_non_leaf_index = (_array.size() / 2) - 1; // For readability
-        for (int i = last_non_leaf_index; i > -1; --i) {
+        for (int i = (_array.size() / 2) - 1; i > -1; --i) {
             sift_down(i); // Sift down each node until we reach the root
         }
     }

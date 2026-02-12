@@ -21,6 +21,7 @@ template <typename K, typename V> struct TreapNode {
 
 template <typename K, typename V> class Treap {
   private:
+    typedef TreapNode<K, V> TNode;
     TNode* _root;
 
     /**
@@ -214,7 +215,7 @@ template <typename K, typename V> class Treap {
     }
 
   public:
-    typedef TreapNode<K, V> TNode;
+    // typedef TreapNode<K, V> TNode;
 
     // Constructor
     Treap() : _root(0) {}
