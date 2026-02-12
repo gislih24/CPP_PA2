@@ -3,9 +3,9 @@ CXXFLAGS := -std=c++98 -O2 -Wall -Wextra -pedantic
 INCLUDES := -I.
 
 BIN_DIR := bin
-TARGET := dequeue
-SRC := kattis_dequeue_template.cpp
-HDR := Dequeue.h
+TARGET := heap2
+SRC := kattis_heap2_template.cpp
+HDR := Heap2.h
 
 .PHONY: all build run clean
 
