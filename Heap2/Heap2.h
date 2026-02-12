@@ -5,7 +5,7 @@
 template <typename T> struct Heap2 {
   private:
     // Import DSA for DRY.
-    DynamicallySizedArray<T> array_;
+    DynamicallySizedArray<T> _array;
 
     /**
      * @brief Heapify the array. This is used in the constructor that takes an
@@ -16,7 +16,7 @@ template <typename T> struct Heap2 {
      * all nodes in the heap.
      */
     void heapify(int index) {
-        last_non_leaf_index = (array_.size() / 2) - 1; // For readability
+        last_non_leaf_index = (_array.size() / 2) - 1; // For readability
         for (int i = last_non_leaf_index; i > -1; --i) {
             sift_down(i); // Sift down each node until we reach the root
         }
@@ -30,9 +30,9 @@ template <typename T> struct Heap2 {
      * @param index2 Index of the second value to swap.
      */
     void swap_array_values(int index1, int index2) {
-        T tempVar = array_[index1];
-        array_[index1] = array_[index2];
-        array_[index2] = tempVar;
+        T tempVar = _array[index1];
+        _array[index1] = _array[index2];
+        _array[index2] = tempVar;
     }
 
     /**
@@ -48,7 +48,7 @@ template <typename T> struct Heap2 {
     void sift_up(int elem_index) {
         while (elem_index > 0) {
             int parent_index = (elem_index - 1) / 2;
-            if (array_[elem_index] < array_[parent_index]) {
+            if (_array[elem_index] < _array[parent_index]) {
                 swap_array_values(elem_index, parent_index);
                 elem_index = parent_index;
             } else {
@@ -68,18 +68,18 @@ template <typename T> struct Heap2 {
      * @param elem_index Index of the element to sift down.
      */
     void sift_down(int elem_index) {
-        int array_size = array_.size();
+        int array_size = _array.size();
         while (true) {
             int left_child_index = 2 * elem_index + 1;
             int right_child_index = left_child_index + 1;
             int smallest = elem_index;
 
             if (left_child_index < array_size &&
-                array_[left_child_index] < array_[smallest]) {
+                _array[left_child_index] < _array[smallest]) {
                 smallest = left_child_index;
             }
             if (right_child_index < array_size &&
-                array_[right_child_index] < array_[smallest]) {
+                _array[right_child_index] < _array[smallest]) {
                 smallest = right_child_index;
             }
 
@@ -94,15 +94,15 @@ template <typename T> struct Heap2 {
 
   public:
     // Constructor
-    Heap2() : array_() {}
+    Heap2() : _array() {}
 
     // Copy Constructor
-    Heap2(Heap2 const& other) : array_(other.array_) {}
+    Heap2(Heap2 const& other) : _array(other._array) {}
 
     // Assignment operator
     Heap2& operator=(Heap2 const& other) {
         if (this != &other) {
-            array_ = other.array_;
+            _array = other._array;
         }
         return *this;
     }
@@ -119,8 +119,8 @@ template <typename T> struct Heap2 {
      * @param value The value to insert into the heap.
      */
     void push(T const& value) {
-        array_.push_back(value);
-        sift_up(array_.size() - 1);
+        _array.push_back(value);
+        sift_up(_array.size() - 1);
     }
 
     /**
@@ -133,16 +133,16 @@ template <typename T> struct Heap2 {
      * @return The smallest element that was removed from the heap.
      */
     T pop() {
-        T minVal = array_[0]; // Store the minimum value to return later
+        T minVal = _array[0]; // Store the minimum value to return later
         // If there's only one element, we can just pop it and return
-        if (array_.size() == 1) {
-            array_.pop_back();
+        if (_array.size() == 1) {
+            _array.pop_back();
             return minVal;
         }
 
-        T last = array_.back(); // Store last element to move to root after pop
-        array_.pop_back();      // Remove the last element from the array
-        array_[0] = last;       // Move the last element to the root
+        T last = _array.back(); // Store last element to move to root after pop
+        _array.pop_back();      // Remove the last element from the array
+        _array[0] = last;       // Move the last element to the root
         sift_down(0);  // Sift down the new root to maintain the heap property
         return minVal; // Finally, return the min value that we poppped
     }
@@ -155,7 +155,7 @@ template <typename T> struct Heap2 {
      * @return The smallest element in the heap.
      */
     T const& peek() const {
-        return array_[0];
+        return _array[0];
     }
 
     /**
@@ -167,7 +167,7 @@ template <typename T> struct Heap2 {
      * @return The size of the heap.
      */
     int size() const {
-        return array_.size();
+        return _array.size();
     }
 };
 
