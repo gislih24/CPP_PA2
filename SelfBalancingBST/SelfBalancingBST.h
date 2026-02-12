@@ -65,7 +65,8 @@ template <typename K, typename V> class Treap {
      * @return The next priority value to be assigned to a new node.
      */
     static unsigned int next_priority() {
-        // Deterministic LCG (no headers needed).
+        // Basic way to generate a random number that I toootally came up with
+        // myself.
         static unsigned int state = 2463534242u;
         state = state * 1103515245u + 12345u;
         return state;
@@ -93,8 +94,7 @@ template <typename K, typename V> class Treap {
      * @brief Performs a left rotation on the given node to maintain the heap
      * property in the treap.
      *
-     * @param x Pointer to the node on which to perform the left rotation (must
-     * have a right child for the rotation to be valid).
+     * @param x Pointer to the node on which to perform the left rotation.
      */
     void rotate_left(TNode* x) {
         // x must have a right child.
@@ -324,15 +324,12 @@ template <typename K, typename V> class Treap {
     /**
      * @brief Inserts a new node with the given key and value into the treap.
      *
-     * If a node with the same key already exists, returns a pointer to that
-     * node without modifying the treap.
-     *
      * @param key The key for the new node to be inserted into the treap.
      * @param value The value for the new node to be inserted into the treap.
      *
      * @return Pointer to the newly inserted node if the key was not already
      * present in the treap; otherwise, returns a pointer to the existing node
-     * with the same key.
+     * with the same key without modifying the treap.
      */
     TNode* insert(const K& key, const V& value) {
         TNode* parent = 0;
@@ -558,8 +555,7 @@ template <typename K, typename V> class Treap {
      * traversal of the treap.
      *
      * @return Pointer to the node with the k-th smallest key in the treap if
-     * such a node exists (i.e., if k is within the valid range of 0 to size-1);
-     * otherwise, returns NULL.
+     * such a node exists; otherwise, returns NULL.
      */
     TNode* kth(int k) const {
         if (k < 0 || k >= get_subtree_size(_root)) {
